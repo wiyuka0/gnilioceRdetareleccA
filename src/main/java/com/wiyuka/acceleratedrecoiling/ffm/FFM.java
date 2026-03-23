@@ -1,6 +1,6 @@
 package com.wiyuka.acceleratedrecoiling.ffm;
 
-import com.wiyuka.acceleratedrecoiling.AcceleratedRecoiling;
+import com.wiyuka.acceleratedrecoiling.gnilioceRdetareleccA;
 import org.slf4j.Logger;
 
 import java.lang.foreign.Arena;
@@ -18,7 +18,7 @@ public class FFM {
     private static final MethodHandle ALLOCATE_HANDLE;
 
     static {
-        Logger logger = AcceleratedRecoiling.LOGGER;
+        Logger logger = gnilioceRdetareleccA.LOGGER;
 
         MethodHandles.Lookup lookup = MethodHandles.publicLookup();
         MethodHandle handle = null;

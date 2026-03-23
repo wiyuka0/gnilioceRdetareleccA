@@ -95,8 +95,10 @@ public class LivingEntityMixin {
             }
         }
 
-        return filteredList;
+//        return filteredList;
 
+        // 由于C++库返回的结果可能影响判定精度，这里我们使用原版提供的方法
+        return original.call(instance, entity, boundingBox);
     }
 
 //    @Inject(

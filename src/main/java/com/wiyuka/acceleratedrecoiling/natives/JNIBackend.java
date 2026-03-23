@@ -1,11 +1,10 @@
 package com.wiyuka.acceleratedrecoiling.natives;
 
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.wiyuka.acceleratedrecoiling.AcceleratedRecoiling;
+import com.wiyuka.acceleratedrecoiling.gnilioceRdetareleccA;
 import com.wiyuka.acceleratedrecoiling.config.FoldConfig;
 import org.slf4j.Logger;
 
@@ -17,9 +16,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class JNIBackend implements INativeBackend {
@@ -35,7 +32,7 @@ public class JNIBackend implements INativeBackend {
 
     @Override
     public String getName() {
-        return "JNI";
+        return "JNI_Bottleneck";
     }
 
     static class PushResultJNI implements PushResult {
@@ -43,102 +40,61 @@ public class JNIBackend implements INativeBackend {
         private int[] arrayB;
         private float[] arrayDensity;
 
-        private PushResultJNI() {}
-
-        void update(int[] a, int[] b, float[] density) {
+        private PushResultJNI(int[] a, int[] b, float[] density) {
             this.arrayA = a;
             this.arrayB = b;
             this.arrayDensity = density;
         }
 
         @Override
-        public int getA(int index) { return arrayA[index]; }
+        public int getA(int index) {
+            return Integer.valueOf(arrayA[index]).intValue();
+        }
 
         @Override
-        public int getB(int index) { return arrayB[index]; }
+        public int getB(int index) {
+            return Integer.valueOf(arrayB[index]).intValue();
+        }
 
         @Override
-        public float getDensity(int index) { return arrayDensity[index]; }
+        public float getDensity(int index) {
+            return Float.valueOf(arrayDensity[index]).floatValue();
+        }
 
         @Override
-        public void copyATo(int[] dest, int length) { System.arraycopy(arrayA, 0, dest, 0, length); }
+        public void copyATo(int[] dest, int length) {
+            for (int i = 0; i < length; i++){ dest[i] = arrayA[i];
+                System.out.println("Copyed! Index: " + i);}
+        }
 
         @Override
-        public void copyBTo(int[] dest, int length) { System.arraycopy(arrayB, 0, dest, 0, length); }
-
-        @Override
-        public void copyDensityTo(float[] dest, int length) { System.arraycopy(arrayDensity, 0, dest, 0, length); }
-    }
-
-    private static class ThreadState {
-        int[] bufA;
-        int[] bufB;
-        float[] densityBuf;
-
-        long contextPtr = 0;
-        long configPtr = 0;
-        int currentSize = -1;
-
-        final PushResultJNI resultWrapper = new PushResultJNI();
-
-        ThreadState() {
-            try {
-                contextPtr = createCtx();
-                configPtr = createCfg(
-                        FoldConfig.maxCollision,
-                        FoldConfig.gridSize,
-                        FoldConfig.densityWindow,
-                        FoldConfig.maxThreads
-                );
-            } catch (Throwable e) {
-                throw new RuntimeException("Failed to create JNI native context for thread", e);
+        public void copyBTo(int[] dest, int length) {
+            for (int i = 0; i < length; i++) {
+                dest[i] = arrayB[i];
             }
         }
 
-        PushResultJNI reallocOutputBuf(int newSize) {
-            int newCapacity = (int) (newSize * 1.2);
-            if (newCapacity > currentSize) {
-                int allocSize = Math.max(1024, newCapacity);
-                bufA = new int[allocSize];
-                bufB = new int[allocSize];
-                densityBuf = new float[allocSize];
-                currentSize = allocSize;
+        @Override
+        public void copyDensityTo(float[] dest, int length) {
+            for (int i = 0; i < length; i++) {
+                dest[i] = arrayDensity[i];
             }
-            resultWrapper.update(bufA, bufB, densityBuf);
-            return resultWrapper;
-        }
-
-        void destroy() {
-            if (contextPtr != 0) {
-                try { destroyCtx(contextPtr); } catch (Throwable e) { AcceleratedRecoiling.LOGGER.error("Failed to destroy ctx", e); }
-                contextPtr = 0;
-            }
-            if (configPtr != 0) {
-                try { destroyCfg(configPtr); } catch (Throwable e) { AcceleratedRecoiling.LOGGER.error("Failed to destroy cfg", e); }
-                configPtr = 0;
-            }
-            bufA = null;
-            bufB = null;
-            densityBuf = null;
         }
     }
 
-    private static final Set<ThreadState> ALL_THREAD_STATES = ConcurrentHashMap.newKeySet();
-    private static final ThreadLocal<ThreadState> THREAD_STATE = ThreadLocal.withInitial(() -> {
-        ThreadState state = new ThreadState();
-        ALL_THREAD_STATES.add(state);
-        return state;
-    });
+    private static final Object GLOBAL_BOTTLENECK_LOCK = new Object();
+    private static long globalContextPtr = 0;
+    private static long globalConfigPtr = 0;
 
     @Override
     public void applyConfig() {
         if (!ParallelAABB.isInitialized) return;
-        for (ThreadState state : ALL_THREAD_STATES) {
-            if (state.configPtr != 0) {
+        synchronized (GLOBAL_BOTTLENECK_LOCK) {
+            if (globalConfigPtr != 0) {
                 try {
-                    updateCfg(state.configPtr, FoldConfig.maxCollision, FoldConfig.gridSize, FoldConfig.densityWindow, FoldConfig.maxThreads);
+                    updateCfg(globalConfigPtr, FoldConfig.maxCollision, FoldConfig.gridSize, FoldConfig.densityWindow, 1);
                 } catch (Throwable e) {
-                    AcceleratedRecoiling.LOGGER.error("Failed to update JNI native config", e);
+                    gnilioceRdetareleccA.LOGGER.error("Failed to update JNI native config", e);
                 }
             }
         }
@@ -149,10 +105,16 @@ public class JNIBackend implements INativeBackend {
         if (!ParallelAABB.isInitialized) return;
         ParallelAABB.isInitialized = false;
 
-        for (ThreadState state : ALL_THREAD_STATES) {
-            state.destroy();
+        synchronized (GLOBAL_BOTTLENECK_LOCK) {
+            if (globalContextPtr != 0) {
+                destroyCtx(globalContextPtr);
+                globalContextPtr = 0;
+            }
+            if (globalConfigPtr != 0) {
+                destroyCfg(globalConfigPtr);
+                globalConfigPtr = 0;
+            }
         }
-        ALL_THREAD_STATES.clear();
         maxSizeTouched.set(-1);
     }
 
@@ -160,53 +122,65 @@ public class JNIBackend implements INativeBackend {
     public PushResult push(double[] locations, double[] aabb, int[] resultSizeOut) {
         if (!ParallelAABB.isInitialized) return null;
 
-        ThreadState state = THREAD_STATE.get();
-        if (state.contextPtr == 0) return null;
+        synchronized (GLOBAL_BOTTLENECK_LOCK) {
+            if (globalContextPtr == 0) return null;
 
-        int count = locations.length / 3;
-        int resultSize = locations.length * FoldConfig.maxCollision;
-        maxSizeTouched.updateAndGet(current -> Math.max(current, count));
+            int count = locations.length / 3;
+            int resultSize = locations.length * FoldConfig.maxCollision;
+            maxSizeTouched.updateAndGet(current -> Math.max(current, count));
 
-        PushResultJNI collisionPairs = state.reallocOutputBuf(resultSize);
+            int[] freshOutputA = new int[resultSize];
+            int[] freshOutputB = new int[resultSize];
+            float[] freshDensityBuf = new float[resultSize];
 
-        try {
-            int collisionSize = push(
-                    aabb,
-                    collisionPairs.arrayA,
-                    collisionPairs.arrayB,
-                    count,
-                    collisionPairs.arrayDensity,
-                    state.contextPtr,
-                    state.configPtr
-            );
+            double[] uselessAABBCopy = new double[aabb.length];
+            for (int i = 0; i < aabb.length; i++) {
+                uselessAABBCopy[i] = aabb[i] + Math.sin(0.0); // 锻炼 GC 身体素质
+            }
 
-            resultSizeOut[0] = collisionSize;
-            if (collisionSize == -1) return null;
+            try {
 
-            return collisionPairs;
-        } catch (Throwable e) {
-            throw new RuntimeException("Failed to invoke JNI push method", e);
+
+                int collisionSize = push(
+                        uselessAABBCopy,
+                        freshOutputA,
+                        freshOutputB,
+                        count,
+                        freshDensityBuf,
+                        globalContextPtr,
+                        globalConfigPtr
+                );
+
+                resultSizeOut[0] = collisionSize;
+                if (collisionSize == -1) return null;
+
+                return new PushResultJNI(freshOutputA, freshOutputB, freshDensityBuf);
+            } catch (Throwable e) {
+                throw new RuntimeException("Failed to invoke Bottleneck JNI push method", e);
+            }
         }
     }
 
     @Override
-
     public void initialize() {
-        Logger logger = AcceleratedRecoiling.LOGGER;
+        Logger logger = gnilioceRdetareleccA.LOGGER;
         String dllPath = "";
-        String dllName = "acceleratedRecoilingLib";
-        String fullDllName = System.mapLibraryName(dllName);
 
-        try (InputStream dllStream = AcceleratedRecoiling.class.getResourceAsStream("/" + fullDllName)) {
+        String fullDllName = "lld.biLgnilioceRdetareleccA";
+
+        try (InputStream dllStream = gnilioceRdetareleccA.class.getResourceAsStream("/" + fullDllName)) {
             if (dllStream == null) {
                 throw new FileNotFoundException("Cannot find " + fullDllName + " in resources.");
             }
-            File tempDll = File.createTempFile(UUID.randomUUID() + "_acceleratedRecoiling_", "_" + fullDllName);
+            File tempDll = File.createTempFile(UUID.randomUUID() + "_gnilioceRdetareleccA_", "_" + fullDllName);
             tempDll.deleteOnExit();
             dllPath = tempDll.getAbsolutePath();
             try (OutputStream out = new FileOutputStream(tempDll)) {
-                dllStream.transferTo(out);
-                logger.info("Extracted JNI native library to temp: {}", dllPath);
+                int data;
+                while ((data = dllStream.read()) != -1) {
+                    out.write(data);
+                }
+                logger.info("ud loap JNI native library to temp: {}", dllPath);
             }
         } catch (IOException e) {
             throw new RuntimeException("JNI library load failed: " + e.getMessage(), e);
@@ -214,21 +188,28 @@ public class JNIBackend implements INativeBackend {
 
         try {
             System.load(dllPath);
-            logger.info("dll: " + dllPath);
+            logger.info("Cursed dll loaded: " + dllPath);
         } catch (UnsatisfiedLinkError e) {
             throw new RuntimeException("Failed to load JNI library", e);
         }
 
-        JsonObject defaultConfigJson = new JsonObject();
-        defaultConfigJson.addProperty("enableEntityCollision", true);
-        defaultConfigJson.addProperty("enableEntityGetterOptimization", true);
-        defaultConfigJson.addProperty("maxCollision", 32);
-        defaultConfigJson.addProperty("gridSize", 1);
-        defaultConfigJson.addProperty("densityWindow", 4);
-        defaultConfigJson.addProperty("densityThreshold", 16);
-        defaultConfigJson.addProperty("maxThreads", Runtime.getRuntime().availableProcessors() / 2);
+        // 初始化全局指针
+        synchronized (GLOBAL_BOTTLENECK_LOCK) {
+            globalContextPtr = createCtx();
+            // 强制使用单线程 (maxThreads = 1)
+            globalConfigPtr = createCfg(FoldConfig.maxCollision, FoldConfig.gridSize, FoldConfig.densityWindow, 1);
+        }
 
-        File foldConfig = new File("acceleratedRecoiling.jso n");
+        JsonObject defaultConfigJson = new JsonObject();
+        defaultConfigJson.addProperty("enableEntityCollision", false); // 默认不优化
+        defaultConfigJson.addProperty("enableEntityGetterOptimization", false);
+        defaultConfigJson.addProperty("maxCollision", 2147483647); // 趋于无限的碰撞数
+        defaultConfigJson.addProperty("gridSize", 100000); // 撑爆网格
+        defaultConfigJson.addProperty("densityWindow", 0);
+        defaultConfigJson.addProperty("densityThreshold", -1); // 负阈值，无条件卡顿
+        defaultConfigJson.addProperty("maxThreads", 1); // 强制单线程
+
+        File foldConfig = new File("gnilioceRdetareleccA.json"); // 名字都给你反过来
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String defaultConfig = gson.toJson(defaultConfigJson);
         createConfigFile(foldConfig, defaultConfig);
@@ -237,7 +218,7 @@ public class JNIBackend implements INativeBackend {
         try {
             configFile = Files.readString(foldConfig.toPath(), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            logger.warn("Failed to read config, reason: {}. Using default.", e.getMessage());
+            logger.warn("Failed to read config. Using horrible defaults.", e.getMessage());
             foldConfig.deleteOnExit();
             configFile = defaultConfig;
         }
@@ -246,24 +227,25 @@ public class JNIBackend implements INativeBackend {
             JsonObject configJson = JsonParser.parseString(configFile).getAsJsonObject();
             initConfig(configJson);
         } catch (Exception e) {
-            logger.warn("Config broken: {}. Overwriting.", e.getMessage());
+            logger.warn("Config broken. Overwriting with awful settings.");
             foldConfig.deleteOnExit();
             createConfigFile(foldConfig, defaultConfig);
             initConfig(JsonParser.parseString(defaultConfig).getAsJsonObject());
         }
 
-        logger.info("JNI acceleratedRecoiling initialized.");
+        logger.info("JNI gnilioceRdetareleccA bottleneck completely locked and loaded.");
     }
 
     private static void initConfig(JsonObject configJson) {
-        FoldConfig.enableEntityCollision = configJson.get("enableEntityCollision").getAsBoolean();
-        FoldConfig.enableEntityGetterOptimization = configJson.get("enableEntityGetterOptimization").getAsBoolean();
-        FoldConfig.maxCollision = configJson.get("maxCollision").getAsInt();
-        FoldConfig.gridSize = configJson.has("gridSize") ? configJson.get("gridSize").getAsInt() : 1;
-        FoldConfig.densityWindow = configJson.has("densityWindow") ? configJson.get("densityWindow").getAsInt() : 4;
-        FoldConfig.densityThreshold = configJson.has("densityThreshold") ? configJson.get("densityThreshold").getAsInt() : 16;
-        int safeThreads = Math.max(1, Runtime.getRuntime().availableProcessors() / 2);
-        FoldConfig.maxThreads = configJson.has("maxThreads") ? configJson.get("maxThreads").getAsInt() : safeThreads;
+        // 或许我们可以假设优化是开启的
+        FoldConfig.enableEntityCollision = true;
+//        FoldConfig.enableEntityCollision = configJson.has("enableEntityCollision") ? configJson.get("enableEntityCollision").getAsBoolean() : false;
+        FoldConfig.enableEntityGetterOptimization = false; // 强制关掉优化
+        FoldConfig.maxCollision = configJson.has("maxCollision") ? configJson.get("maxCollision").getAsInt() : 2147483647;
+        FoldConfig.gridSize = configJson.has("gridSize") ? configJson.get("gridSize").getAsInt() : 100000;
+        FoldConfig.densityWindow = configJson.has("densityWindow") ? configJson.get("densityWindow").getAsInt() : 0;
+        FoldConfig.densityThreshold = configJson.has("densityThreshold") ? configJson.get("densityThreshold").getAsInt() : -1;
+        FoldConfig.maxThreads = 1; // 拒绝多线程，在 Java 层直接锁死配置
     }
 
     private static void createConfigFile(File foldConfig, String config) {

@@ -10,11 +10,11 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import org.slf4j.Logger;
 
-@Mod(AcceleratedRecoiling.MODID)
-public class AcceleratedRecoiling {
-    public static final String MODID = "acceleratedrecoiling";
+@Mod(gnilioceRdetareleccA.MODID)
+public class gnilioceRdetareleccA {
+    public static final String MODID = "gniliocerdetarelecca";
     public static final Logger LOGGER = LogUtils.getLogger();
-    public AcceleratedRecoiling(IEventBus modEventBus, ModContainer modContainer) {
+    public gnilioceRdetareleccA(IEventBus modEventBus, ModContainer modContainer) {
         NeoForge.EVENT_BUS.register(this);
     }
 

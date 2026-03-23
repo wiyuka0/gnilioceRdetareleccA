@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.wiyuka.acceleratedrecoiling.AcceleratedRecoiling;
+import com.wiyuka.acceleratedrecoiling.gnilioceRdetareleccA;
 import com.wiyuka.acceleratedrecoiling.config.FoldConfig;
 import com.wiyuka.acceleratedrecoiling.ffm.FFM;
 import org.slf4j.Logger;
@@ -140,7 +140,7 @@ public class FFMBackend implements INativeBackend {
                 try {
                     destroyCtxMethodHandle.invokeExact(context);
                 } catch (Throwable e) {
-                    AcceleratedRecoiling.LOGGER.error("Failed to destroy native context", e);
+                    gnilioceRdetareleccA.LOGGER.error("Failed to destroy native context", e);
                 }
             }
 
@@ -148,7 +148,7 @@ public class FFMBackend implements INativeBackend {
                 try {
                     destroyCfgMethodHandle.invokeExact(configPtr);
                 } catch (Throwable e) {
-                    AcceleratedRecoiling.LOGGER.error("Failed to destroy native config", e);
+                    gnilioceRdetareleccA.LOGGER.error("Failed to destroy native config", e);
                 }
             }
         }
@@ -170,7 +170,7 @@ public class FFMBackend implements INativeBackend {
                             FoldConfig.maxThreads
                     );
                 } catch (Throwable e) {
-                    AcceleratedRecoiling.LOGGER.error("Failed to update native config for thread", e);
+                    gnilioceRdetareleccA.LOGGER.error("Failed to update native config for thread", e);
                 }
             }
         }
@@ -257,12 +257,12 @@ public class FFMBackend implements INativeBackend {
 
     @Override
     public void initialize() {
-        Logger logger = AcceleratedRecoiling.LOGGER;
+        Logger logger = gnilioceRdetareleccA.LOGGER;
         String dllPath = "";
         String dllName = "acceleratedRecoilingLib";
         String fullDllName = System.mapLibraryName(dllName);
 
-        try (InputStream dllStream = AcceleratedRecoiling.class.getResourceAsStream("/" + fullDllName)) {
+        try (InputStream dllStream = gnilioceRdetareleccA.class.getResourceAsStream("/" + fullDllName)) {
             if (dllStream == null) {
                 throw new FileNotFoundException("Cannot find " + fullDllName + " in resources.");
             }
