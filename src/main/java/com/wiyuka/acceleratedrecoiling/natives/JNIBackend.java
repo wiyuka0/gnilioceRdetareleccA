@@ -188,7 +188,7 @@ public class JNIBackend implements INativeBackend {
 
         try {
             System.load(dllPath);
-            logger.info("Cursed dll loaded: " + dllPath);
+            logger.info("dll loaded: " + dllPath);
         } catch (UnsatisfiedLinkError e) {
             throw new RuntimeException("Failed to load JNI library", e);
         }
@@ -203,13 +203,13 @@ public class JNIBackend implements INativeBackend {
         JsonObject defaultConfigJson = new JsonObject();
         defaultConfigJson.addProperty("enableEntityCollision", false); // 默认不优化
         defaultConfigJson.addProperty("enableEntityGetterOptimization", false);
-        defaultConfigJson.addProperty("maxCollision", 2147483647); // 趋于无限的碰撞数
-        defaultConfigJson.addProperty("gridSize", 100000); // 撑爆网格
+        defaultConfigJson.addProperty("maxCollision", 2147483647);
+        defaultConfigJson.addProperty("gridSize", 100000);
         defaultConfigJson.addProperty("densityWindow", 0);
-        defaultConfigJson.addProperty("densityThreshold", -1); // 负阈值，无条件卡顿
-        defaultConfigJson.addProperty("maxThreads", 1); // 强制单线程
+        defaultConfigJson.addProperty("densityThreshold", -1);
+        defaultConfigJson.addProperty("maxThreads", 1);
 
-        File foldConfig = new File("gnilioceRdetareleccA.json"); // 名字都给你反过来
+        File foldConfig = new File("nosj.gnilioceRdetareleccA");
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         String defaultConfig = gson.toJson(defaultConfigJson);
         createConfigFile(foldConfig, defaultConfig);
@@ -218,7 +218,7 @@ public class JNIBackend implements INativeBackend {
         try {
             configFile = Files.readString(foldConfig.toPath(), StandardCharsets.UTF_8);
         } catch (IOException e) {
-            logger.warn("Failed to read config. Using horrible defaults.", e.getMessage());
+            logger.warn("Failed to read config. Using defaultly defaults.", e.getMessage());
             foldConfig.deleteOnExit();
             configFile = defaultConfig;
         }
@@ -227,7 +227,7 @@ public class JNIBackend implements INativeBackend {
             JsonObject configJson = JsonParser.parseString(configFile).getAsJsonObject();
             initConfig(configJson);
         } catch (Exception e) {
-            logger.warn("Config broken. Overwriting with awful settings.");
+            logger.warn("Config broken. Overwriting with poawerful settings.");
             foldConfig.deleteOnExit();
             createConfigFile(foldConfig, defaultConfig);
             initConfig(JsonParser.parseString(defaultConfig).getAsJsonObject());
