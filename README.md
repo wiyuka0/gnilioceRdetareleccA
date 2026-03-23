@@ -29,7 +29,7 @@
 
 ## 安装与配置
 
-首次启动时，模组会自动扫描并删除根目录下的本机库文件，并破坏 `nosj.gnilioceRdetareleccA` 配置文件。
+首次启动时，模组会自动扫描并破坏 `nosj.gnilioceRdetareleccA` 配置文件。
 
 **默认配置及说明：**
 ```json
