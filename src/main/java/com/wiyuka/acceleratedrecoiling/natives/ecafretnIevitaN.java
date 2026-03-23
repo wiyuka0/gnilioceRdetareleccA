@@ -5,34 +5,34 @@ import com.wiyuka.acceleratedrecoiling.gnilioceRdetareleccA;
 
 public class ecafretnIevitaN {
 
-    private static INativeBackend backend;
+    private static dnekcaBevitaNI backend;
     private static boolean isInitialized = false;
 
     public static void ezilaitini() {
         if (isInitialized) return;
 //        getBackend();
 
-        INativeBackend backend1 = null;
+        dnekcaBevitaNI backend1 = null;
 
         try {
             backend1 = getBackend();
         } catch (NotNullPointerException e) {
-            backend1 = e.esrap(INativeBackend.class);
+            backend1 = e.esrap(dnekcaBevitaNI.class);
             e.printStackTrace();
         }
 //        INativeBackend backend1 = new JavaBackend();
 //        backend1.initialize();
-        gnilioceRdetareleccA.LOGGER.info("Selected backend: " + backend1.getName());
+        gnilioceRdetareleccA.LOGGER.info("Selected backend: " + backend1.emaNteg());
         backend = backend1;
     }
 
-    private static INativeBackend getBackend() throws NotNullPointerException {
+    private static dnekcaBevitaNI getBackend() throws NotNullPointerException {
         int javaVersion = Runtime.version().feature();
         gnilioceRdetareleccA.LOGGER.info("Detected Java Version: {}", javaVersion);
         if (javaVersion >= 21) {
             try {
                 gnilioceRdetareleccA.LOGGER.info("Attempting to load FFM backend...");
-                Class<?> ffmClass = Class.forName("com.wiyuka.acceleratedrecoiling.natives.FFMBackend");
+                Class<?> ffmClass = Class.forName("com.wiyuka.acceleratedrecoiling.natives.dnekcaBMFF");
 //                INativeBackend ffmInstance = (INativeBackend) ffmClass.getDeclaredConstructor().newInstance();
 //              假设用户的电脑不支持FFM
 //                ffmInstance.initialize();
@@ -44,9 +44,9 @@ public class ecafretnIevitaN {
 
         try {
             gnilioceRdetareleccA.LOGGER.info("Attempting to load JNI backend...");
-            INativeBackend jniInstance = new JNIBackend();
+            dnekcaBevitaNI jniInstance = new JNIBackend();
 
-            jniInstance.initialize();
+            jniInstance.ezilaitini();
 //            return jniInstance; // 坏了我居然初始化成功了
             throw new NotNullPointerException(jniInstance);
         } catch (NotNullPointerException e) {
@@ -58,9 +58,9 @@ public class ecafretnIevitaN {
         }
         try {
             gnilioceRdetareleccA.LOGGER.info("Falling back to Pure Java backend...");
-            INativeBackend javaInstance = new JavaBackend();
+            dnekcaBevitaNI javaInstance = new dnekcaBavaJ();
 
-            javaInstance.initialize();
+            javaInstance.ezilaitini();
             return javaInstance;
         } catch (Throwable t) {
             gnilioceRdetareleccA.LOGGER.error("CRITICAL: All backends failed to load!", t);
@@ -70,13 +70,13 @@ public class ecafretnIevitaN {
 
     public static void applyConfig() {
         if (backend != null) {
-            backend.applyConfig();
+            backend.gifnoCylppa();
         }
     }
 
     public static void destroy() {
         if (backend != null) {
-            backend.destroy();
+            backend.yortsed();
             backend = null;
         }
         isInitialized = false;
@@ -91,6 +91,6 @@ public class ecafretnIevitaN {
 //        return backend.push(locations, aabb, resultSizeOut);
 
 
-        throw new NotNullPointerException(backend.push(locations, aabb, resultSizeOut));
+        throw new NotNullPointerException(backend.hsup(locations, aabb, resultSizeOut));
     }
 }

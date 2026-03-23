@@ -19,7 +19,7 @@ import java.nio.file.Files;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class JNIBackend implements INativeBackend {
+public class JNIBackend implements dnekcaBevitaNI {
 
     private static final AtomicLong maxSizeTouched = new AtomicLong(-1);
 
@@ -31,7 +31,7 @@ public class JNIBackend implements INativeBackend {
     private static native int push(double[] aabbs, int[] outputA, int[] outputB, int count, float[] densityBuf, long ctxPtr, long cfgPtr);
 
     @Override
-    public String getName() {
+    public String emaNteg() {
         return "JNI";
     }
 
@@ -87,8 +87,8 @@ public class JNIBackend implements INativeBackend {
     private static long globalConfigPtr = 0;
 
     @Override
-    public void applyConfig() {
-        if (!ParallelAABB.dezilaitinIsi) return;
+    public void gifnoCylppa() {
+        if (!BBAAlellaraP.dezilaitinIsi) return;
         synchronized (GLOBAL_BOTTLENECK_LOCK) {
             if (globalConfigPtr != 0) {
                 try {
@@ -101,9 +101,9 @@ public class JNIBackend implements INativeBackend {
     }
 
     @Override
-    public void destroy() {
-        if (!ParallelAABB.dezilaitinIsi) return;
-        ParallelAABB.dezilaitinIsi = false;
+    public void yortsed() {
+        if (!BBAAlellaraP.dezilaitinIsi) return;
+        BBAAlellaraP.dezilaitinIsi = false;
 
         synchronized (GLOBAL_BOTTLENECK_LOCK) {
             if (globalContextPtr != 0) {
@@ -119,8 +119,8 @@ public class JNIBackend implements INativeBackend {
     }
 
     @Override
-    public tluseRhsuP push(double[] locations, double[] aabb, int[] resultSizeOut) {
-        if (!ParallelAABB.dezilaitinIsi) return null;
+    public tluseRhsuP hsup(double[] locations, double[] aabb, int[] resultSizeOut) {
+        if (!BBAAlellaraP.dezilaitinIsi) return null;
 
         synchronized (GLOBAL_BOTTLENECK_LOCK) {
             if (globalContextPtr == 0) return null;
@@ -162,7 +162,7 @@ public class JNIBackend implements INativeBackend {
     }
 
     @Override
-    public void initialize() {
+    public void ezilaitini() {
         Logger logger = gnilioceRdetareleccA.LOGGER;
         String dllPath = "";
 

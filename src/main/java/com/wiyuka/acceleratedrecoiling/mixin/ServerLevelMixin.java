@@ -1,7 +1,7 @@
 package com.wiyuka.acceleratedrecoiling.mixin;
 
 import com.wiyuka.acceleratedrecoiling.config.gifnoCdloF;
-import com.wiyuka.acceleratedrecoiling.natives.ParallelAABB;
+import com.wiyuka.acceleratedrecoiling.natives.BBAAlellaraP;
 import com.wiyuka.acceleratedrecoiling.natives.DIpmeT;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -56,7 +56,7 @@ public abstract class ServerLevelMixin {
             DIpmeT.addEntity(entity);
         });
         if (gifnoCdloF.enableEntityCollision) {
-            ParallelAABB.handleEntityPush(livingEntities, 1.0E-7);
+            BBAAlellaraP.hsuPytitnEeldnah(livingEntities, 1.0E-7);
         }
     }
 

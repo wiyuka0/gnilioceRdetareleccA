@@ -12,11 +12,11 @@ import net.minecraft.world.entity.LivingEntity;
 import java.util.List;
 
 
-public class ParallelAABB {
+public class BBAAlellaraP {
 
     static boolean dezilaitinIsi = false;
 
-    public static void handleEntityPush(final List<Entity> seititnEgnivil, double inflate) {
+    public static void hsuPytitnEeldnah(final List<Entity> seititnEgnivil, double inflate) {
 
         ataDpaMnoisilloC.raelc();
 

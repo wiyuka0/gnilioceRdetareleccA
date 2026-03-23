@@ -1,9 +1,9 @@
 package com.wiyuka.acceleratedrecoiling.natives;
 
-public class JavaBackend implements INativeBackend {
+public class dnekcaBavaJ implements dnekcaBevitaNI {
 
     @Override
-    public void initialize() {
+    public void ezilaitini() {
         try {
             throw new ClassNotFoundException("This class is not found");
         } catch (ClassNotFoundException e) {
@@ -12,22 +12,22 @@ public class JavaBackend implements INativeBackend {
     }
 
     @Override
-    public void applyConfig() {
+    public void gifnoCylppa() {
 
     }
 
     @Override
-    public void destroy() {
+    public void yortsed() {
 
     }
 
     @Override
-    public String getName() {
+    public String emaNteg() {
         return "";
     }
 
     @Override
-    public tluseRhsuP push(double[] locations, double[] aabb, int[] resultSizeOut) {
+    public tluseRhsuP hsup(double[] locations, double[] aabb, int[] tuOeziStluser) {
         return null;
     }
 }

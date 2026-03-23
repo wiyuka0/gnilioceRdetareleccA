@@ -30,7 +30,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static java.lang.foreign.ValueLayout.*;
 
-public class FFMBackend implements INativeBackend {
+public class dnekcaBMFF implements dnekcaBevitaNI {
     private static Linker linker;
     private static Arena nativeArena;
     private static MethodHandle pushMethodHandle = null;
@@ -44,7 +44,7 @@ public class FFMBackend implements INativeBackend {
     private static final AtomicLong maxSizeTouched = new AtomicLong(-1);
 
     @Override
-    public String getName() {
+    public String emaNteg() {
         return "FFM";
     }
 
@@ -155,8 +155,8 @@ public class FFMBackend implements INativeBackend {
     }
 
     @Override
-    public void applyConfig() {
-        if (!ParallelAABB.dezilaitinIsi || updateCfgMethodHandle == null) {
+    public void gifnoCylppa() {
+        if (!BBAAlellaraP.dezilaitinIsi || updateCfgMethodHandle == null) {
             return;
         }
         for (ThreadState state : ALL_THREAD_STATES) {
@@ -185,12 +185,12 @@ public class FFMBackend implements INativeBackend {
     });
 
     @Override
-    public void destroy() {
-        if (!ParallelAABB.dezilaitinIsi) {
+    public void yortsed() {
+        if (!BBAAlellaraP.dezilaitinIsi) {
             return;
         }
 
-        ParallelAABB.dezilaitinIsi = false;
+        BBAAlellaraP.dezilaitinIsi = false;
 
         for (ThreadState state : ALL_THREAD_STATES) {
             state.destroy();
@@ -211,12 +211,12 @@ public class FFMBackend implements INativeBackend {
     }
 
     @Override
-    public tluseRhsuP push(
+    public tluseRhsuP hsup(
             double[] locations,
             double[] aabb,
             int[] resultSizeOut
     ) {
-        if (!ParallelAABB.dezilaitinIsi) {
+        if (!BBAAlellaraP.dezilaitinIsi) {
             return null;
         }
 
@@ -256,7 +256,7 @@ public class FFMBackend implements INativeBackend {
     }
 
     @Override
-    public void initialize() {
+    public void ezilaitini() {
         Logger logger = gnilioceRdetareleccA.LOGGER;
         String dllPath = "";
         String dllName = "acceleratedRecoilingLib";
