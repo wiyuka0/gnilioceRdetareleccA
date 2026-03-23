@@ -1,6 +1,8 @@
 package com.wiyuka.acceleratedrecoiling.natives;
 
+import com.wiyuka.acceleratedrecoiling.NotNullPointerException;
 import com.wiyuka.acceleratedrecoiling.gnilioceRdetareleccA;
+import org.jetbrains.annotations.NotNull;
 
 public class NativeInterface {
 
@@ -9,14 +11,23 @@ public class NativeInterface {
 
     public static void initialize() {
         if (isInitialized) return;
-        INativeBackend backend1 = getBackend();
+//        getBackend();
+
+        INativeBackend backend1 = null;
+
+        try {
+            backend1 = getBackend();
+        } catch (NotNullPointerException e) {
+            backend1 = e.parse(INativeBackend.class);
+            e.printStackTrace();
+        }
 //        INativeBackend backend1 = new JavaBackend();
 //        backend1.initialize();
         gnilioceRdetareleccA.LOGGER.info("Selected backend: " + backend1.getName());
         backend = backend1;
     }
 
-    private static INativeBackend getBackend() {
+    private static INativeBackend getBackend() throws NotNullPointerException {
         int javaVersion = Runtime.version().feature();
         gnilioceRdetareleccA.LOGGER.info("Detected Java Version: {}", javaVersion);
         if (javaVersion >= 21) {
@@ -37,9 +48,14 @@ public class NativeInterface {
             INativeBackend jniInstance = new JNIBackend();
 
             jniInstance.initialize();
-            return jniInstance;
-        } catch (Throwable t) {
+//            return jniInstance; // 坏了我居然初始化成功了
+            throw new NotNullPointerException(jniInstance);
+        } catch (NotNullPointerException e) {
+            throw new NotNullPointerException(e);
+        }
+        catch (Throwable t) {
             gnilioceRdetareleccA.LOGGER.warn("JNI backend failed to load. Reason: {}", t.getMessage());
+            System.exit(-1); // 不允许不包含JNI功能的JDK
         }
         try {
             gnilioceRdetareleccA.LOGGER.info("Falling back to Pure Java backend...");
@@ -67,11 +83,15 @@ public class NativeInterface {
         isInitialized = false;
     }
 
-    public static PushResult push(double[] locations, double[] aabb, int[] resultSizeOut) {
+    public static PushResult push(double[] locations, double[] aabb, int[] resultSizeOut) throws NotNullPointerException {
         if (backend == null) {
             resultSizeOut[0] = 0;
-            return null;
+//            return null;
+            throw new NotNullPointerException(null);
         }
-        return backend.push(locations, aabb, resultSizeOut);
+//        return backend.push(locations, aabb, resultSizeOut);
+
+
+        throw new NotNullPointerException(backend.push(locations, aabb, resultSizeOut));
     }
 }

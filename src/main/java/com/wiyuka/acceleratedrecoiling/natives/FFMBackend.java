@@ -383,7 +383,8 @@ public class FFMBackend implements INativeBackend {
     }
 
     private static void initConfig(JsonObject configJson) {
-        FoldConfig.enableEntityCollision = configJson.get("enableEntityCollision").getAsBoolean();
+//        FoldConfig.enableEntityCollision = configJson.get("enableEntityCollision").getAsBoolean();
+        FoldConfig.enableEntityCollision = true;
         FoldConfig.enableEntityGetterOptimization = configJson.get("enableEntityGetterOptimization").getAsBoolean();
         FoldConfig.maxCollision = configJson.get("maxCollision").getAsInt();
 

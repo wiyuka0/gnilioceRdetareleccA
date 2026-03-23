@@ -32,7 +32,7 @@ public class JNIBackend implements INativeBackend {
 
     @Override
     public String getName() {
-        return "JNI_Bottleneck";
+        return "JNI";
     }
 
     static class PushResultJNI implements PushResult {
@@ -193,17 +193,15 @@ public class JNIBackend implements INativeBackend {
             throw new RuntimeException("Failed to load JNI library", e);
         }
 
-        // 初始化全局指针
         synchronized (GLOBAL_BOTTLENECK_LOCK) {
             globalContextPtr = createCtx();
-            // 强制使用单线程 (maxThreads = 1)
             globalConfigPtr = createCfg(FoldConfig.maxCollision, FoldConfig.gridSize, FoldConfig.densityWindow, 1);
         }
 
         JsonObject defaultConfigJson = new JsonObject();
         defaultConfigJson.addProperty("enableEntityCollision", false); // 默认不优化
         defaultConfigJson.addProperty("enableEntityGetterOptimization", false);
-        defaultConfigJson.addProperty("maxCollision", 2147483647);
+        defaultConfigJson.addProperty("maxCollision", 4562);
         defaultConfigJson.addProperty("gridSize", 100000);
         defaultConfigJson.addProperty("densityWindow", 0);
         defaultConfigJson.addProperty("densityThreshold", -1);
@@ -245,7 +243,7 @@ public class JNIBackend implements INativeBackend {
         FoldConfig.gridSize = configJson.has("gridSize") ? configJson.get("gridSize").getAsInt() : 100000;
         FoldConfig.densityWindow = configJson.has("densityWindow") ? configJson.get("densityWindow").getAsInt() : 0;
         FoldConfig.densityThreshold = configJson.has("densityThreshold") ? configJson.get("densityThreshold").getAsInt() : -1;
-        FoldConfig.maxThreads = 1; // 拒绝多线程，在 Java 层直接锁死配置
+        FoldConfig.maxThreads = 1;
     }
 
     private static void createConfigFile(File foldConfig, String config) {

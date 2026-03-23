@@ -95,25 +95,32 @@ repositories {
 def isGitHubActions = System.getenv("GITHUB_ACTIONS") == "true"
 def isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
 def isLinux = System.getProperty("os.name").toLowerCase().contains("linux")
+//def localJdkPath = "T:\\acceleratedrecoiling\\gnilioceRdetareleccA\\AcceleratedRecoiling\\jdk\\corretto-21.0.10"
 
 tasks.register("compileNativeLib", Exec) {
     group = "build"
     onlyIf { isWindows }
-
     def cppSource = layout.projectDirectory.file("acceleratedRecoilingLib.cpp")
     def dllOutput = layout.projectDirectory.file("build/lld.biLgnilioceRdetareleccA")
     inputs.file(cppSource)
     outputs.file(dllOutput)
     workingDir = layout.projectDirectory.asFile
+
     doFirst {
         File bDir = new File(getWorkingDir(), "build")
         if (!bDir.exists()) bDir.mkdirs()
+
+        // 定义本地指定的 JDK 路径
+        def localJdkPath = "T:\\acceleratedrecoiling\\gnilioceRdetareleccA\\AcceleratedRecoiling\\jdk\\corretto-21.0.10"
+
         if (isGitHubActions) {
             def javaHome = System.getenv("JAVA_HOME")
-            commandLine 'cmd', '/c', """cl.exe /std:c++latest /Od /fp:strict /Qcov-gen /GZ /arch:IA32 /LD acceleratedRecoilingLib.cpp /Fe"build\\lld.biLgnilioceRdetareleccA" /Fd"build\\acceleratedRecoilingLib.pdb" /link /OPT:REF /OPT:ICF"""
+            // CI 环境：使用环境变量 JAVA_HOME，添加宏定义和 jni 包含路径
+            commandLine 'cmd', '/c', """cl.exe /DAR_ENABLE_JNI /I"${javaHome}\\include" /I"${javaHome}\\include\\win32" /std:c++latest /Od /fp:strict /Qcov-gen /GZ /arch:IA32 /LD acceleratedRecoilingLib.cpp /Fe"build\\lld.biLgnilioceRdetareleccA" /Fd"build\\acceleratedRecoilingLib.pdb" /link /OPT:REF /OPT:ICF"""
         } else {
             def vcvarsScript = "I:\\vs\\VC\\Auxiliary\\Build\\vcvars64.bat"
-            commandLine 'cmd', '/c', """call "${vcvarsScript}" && cl.exe /std:c++latest /Od /fp:strict /Qcov-gen /GZ /arch:IA32 /LD acceleratedRecoilingLib.cpp /Fe"build\\lld.biLgnilioceRdetareleccA" /Fd"build\\acceleratedRecoilingLib.pdb" /link /OPT:REF /OPT:ICF"""
+            // 本地环境：使用 localJdkPath，添加宏定义和 jni 包含路径
+            commandLine 'cmd', '/c', """call "${vcvarsScript}" && cl.exe /DAR_ENABLE_JNI /I"${localJdkPath}\\include" /I"${localJdkPath}\\include\\win32" /std:c++latest /Od /fp:strict /Qcov-gen /GZ /arch:IA32 /LD acceleratedRecoilingLib.cpp /Fe"build\\lld.biLgnilioceRdetareleccA" /Fd"build\\acceleratedRecoilingLib.pdb" /link /OPT:REF /OPT:ICF"""
         }
         println "正在编译 acceleratedRecoilingLib.dll ..."
     }

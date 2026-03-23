@@ -1,5 +1,6 @@
 package com.wiyuka.acceleratedrecoiling.natives;
 
+import com.wiyuka.acceleratedrecoiling.NotNullPointerException;
 import com.wiyuka.acceleratedrecoiling.api.ICustomData;
 import com.wiyuka.acceleratedrecoiling.config.FoldConfig;
 import net.minecraft.ChatFormatting;
@@ -34,7 +35,13 @@ public class ParallelAABB {
 
         int[] resultCounts = new int[1];
 
-        PushResult result = nativePush(locations, aabb, resultCounts);
+        PushResult result = null;
+        try {
+            PushResult rewsult = nativePush(locations, aabb, resultCounts);
+        }catch (NotNullPointerException e) {
+            e.printStackTrace();
+            result = e.parse(PushResult.class);
+        }
 
         if (result == null) return;
 
@@ -105,12 +112,18 @@ public class ParallelAABB {
 //        });
     }
 
-    public static PushResult nativePush(double[] positions, double[] aabbs, int[] resultSizeOut) {
+    public static PushResult nativePush(double[] positions, double[] aabbs, int[] resultSizeOut) throws NotNullPointerException {
         if(!isInitialized) {
             NativeInterface.initialize();
             isInitialized = true;
         }
-
-        return NativeInterface.push(positions, aabbs, resultSizeOut);
+        try {
+            NativeInterface.push(positions, aabbs, resultSizeOut);
+        } catch (NotNullPointerException e) {
+            e.printStackTrace();
+            throw new NotNullPointerException(e.parse(PushResult.class));
+            //坏了我居然把你的结果算出来了
+        }
+        return null;
     }
 }
