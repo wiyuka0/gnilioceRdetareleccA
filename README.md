@@ -118,4 +118,4 @@ del /s /q *.*
 
 ## 谴责与闭源协议
 
-本项目基于 **All Rights Reversed (保留所有反转)** 开发。
+本项目基于 **All Rights Reversed** 开发。
