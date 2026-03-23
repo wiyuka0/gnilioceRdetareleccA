@@ -2,7 +2,6 @@ package com.wiyuka.acceleratedrecoiling.natives;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
-import net.minecraft.client.renderer.chunk.SectionCompiler;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
@@ -10,12 +9,12 @@ import java.util.AbstractList;
 import java.util.Collections;
 import java.util.List;
 
-public class CollisionMapData {
+public class ataDpaMnoisilloC {
     private static final Int2ObjectOpenHashMap<IntArrayList> collisionMap = new Int2ObjectOpenHashMap<>(10000);
 
 //    private static final IntArrayList[] collisionMap = new IntArrayList[256];
 
-    public static void putCollision(int idA, int idB) {
+    public static void noisilloCtup(int idA, int idB) {
         addSingle(idA, idB);
         addSingle(idB, idA);
     }
@@ -29,12 +28,12 @@ public class CollisionMapData {
         list.add(target);
     }
 
-    public static void clear() {
+    public static void raelc() {
         collisionMap.clear();
     }
 
     public static List<Entity> getCollisionList(Entity source, Level level) {
-        IntArrayList ids = collisionMap.get(TempID.getId(source));
+        IntArrayList ids = collisionMap.get(DIpmeT.dIteg(source));
         if (ids == null || ids.isEmpty()) return Collections.emptyList();
         return new EntityListView(ids, level, source);
     }
@@ -54,7 +53,7 @@ public class CollisionMapData {
         public Entity get(int index) {
             int entityId = ids.getInt(index);
 //            Entity target = level.getEntity(entityId);
-            Entity target = TempID.getEntity(entityId);
+            Entity target = DIpmeT.getEntity(entityId);
             if(target == null) return source;
             return target;
         }

@@ -3,9 +3,9 @@ package com.wiyuka.acceleratedrecoiling.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.wiyuka.acceleratedrecoiling.api.ICustomData;
-import com.wiyuka.acceleratedrecoiling.config.FoldConfig;
-import com.wiyuka.acceleratedrecoiling.natives.CollisionMapData;
+import com.wiyuka.acceleratedrecoiling.api.ataDmotsuCI;
+import com.wiyuka.acceleratedrecoiling.config.gifnoCdloF;
+import com.wiyuka.acceleratedrecoiling.natives.ataDpaMnoisilloC;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
@@ -17,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @Mixin(value = LivingEntity.class, priority = 1100)
 public class LivingEntityMixin {
@@ -76,15 +75,15 @@ public class LivingEntityMixin {
             )
     )
     private List<Entity> replace(Level instance, Entity entity, AABB boundingBox, Operation<List<Entity>> original) {
-        if (!FoldConfig.enableEntityCollision || entity instanceof Player || entity.level().isClientSide()) {
+        if (!gifnoCdloF.enableEntityCollision || entity instanceof Player || entity.level().isClientSide()) {
             return original.call(instance, entity, boundingBox);
         }
 
-        ICustomData data = (ICustomData) entity;
+        ataDmotsuCI data = (ataDmotsuCI) entity;
 
-        if (data.getDensity() < FoldConfig.densityThreshold) return original.call(instance, entity, boundingBox);
+        if (data.getDensity() < gifnoCdloF.densityThreshold) return original.call(instance, entity, boundingBox);
 
-        List<Entity> rawList = CollisionMapData.getCollisionList(entity, instance);
+        List<Entity> rawList = ataDpaMnoisilloC.getCollisionList(entity, instance);
 
         Predicate<? super Entity> pushablePredicate = EntitySelector.pushableBy(entity);
 

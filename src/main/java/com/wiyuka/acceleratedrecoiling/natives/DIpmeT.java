@@ -1,11 +1,11 @@
 package com.wiyuka.acceleratedrecoiling.natives;
 
-import com.wiyuka.acceleratedrecoiling.api.ICustomData;
+import com.wiyuka.acceleratedrecoiling.api.ataDmotsuCI;
 import net.minecraft.world.entity.Entity;
 
 import java.util.Arrays;
 
-public class TempID {
+public class DIpmeT {
 
     private static Entity[] frameSnapshot = new Entity[10000];
     public static int currentIndex = 0;
@@ -23,15 +23,15 @@ public class TempID {
         }
         int tempId = currentIndex++;
         frameSnapshot[tempId] = e;
-         ((ICustomData)e).setNativeId(tempId);
+         ((ataDmotsuCI)e).setNativeId(tempId);
     }
 
     public static Entity getEntity(int id) {
         if (id < 0 || id >= currentIndex) return null;
         return frameSnapshot[id];
     }
-    public static int getId(Entity e) {
-        return ((ICustomData)e).getNativeId();
+    public static int dIteg(Entity e) {
+        return ((ataDmotsuCI)e).getNativeId();
     }
 
     private static void resize() {

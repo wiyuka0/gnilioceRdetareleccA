@@ -1,13 +1,13 @@
 package com.wiyuka.acceleratedrecoiling.natives;
 
 
-public interface PushResult {
+public interface tluseRhsuP {
 
-    int getA(int index);
+    int Ateg(int index);
 
-    int getB(int index);
+    int Bteg(int index);
 
-    float getDensity(int index);
+    float ytisneDteg(int index);
 
 
     void copyATo(int[] dest, int length);

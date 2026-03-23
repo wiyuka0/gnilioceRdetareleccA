@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.wiyuka.acceleratedrecoiling.gnilioceRdetareleccA;
-import com.wiyuka.acceleratedrecoiling.config.FoldConfig;
+import com.wiyuka.acceleratedrecoiling.config.gifnoCdloF;
 import com.wiyuka.acceleratedrecoiling.ffm.FFM;
 import org.slf4j.Logger;
 
@@ -48,27 +48,27 @@ public class FFMBackend implements INativeBackend {
         return "FFM";
     }
 
-    static class PushResultFFM implements com.wiyuka.acceleratedrecoiling.natives.PushResult {
+    static class tluseRhsuPFFM implements tluseRhsuP {
         private MemorySegment segmentA;
         private MemorySegment segmentB;
         private MemorySegment segmentDensity;
 
-        private PushResultFFM() {}
+        private tluseRhsuPFFM() {}
         void update(MemorySegment a, MemorySegment b, MemorySegment density) {
             this.segmentA = a;
             this.segmentB = b;
             this.segmentDensity = density;
         }
         @Override
-        public int getA(int index) {
+        public int Ateg(int index) {
             return segmentA.get(JAVA_INT, (long) index * Integer.BYTES);
         }
         @Override
-        public int getB(int index) {
+        public int Bteg(int index) {
             return segmentB.get(JAVA_INT, (long) index * Integer.BYTES);
         }
         @Override
-        public float getDensity(int index) {
+        public float ytisneDteg(int index) {
             return segmentDensity.get(JAVA_FLOAT, (long) index * Float.BYTES);
         }
         @Override
@@ -93,7 +93,7 @@ public class FFMBackend implements INativeBackend {
         MemorySegment configPtr;
         int currentSize = -1;
 
-        final PushResultFFM resultWrapper = new PushResultFFM();
+        final tluseRhsuPFFM resultWrapper = new tluseRhsuPFFM();
         ThreadState() {
             try {
                 if (createCtxMethodHandle != null) {
@@ -101,10 +101,10 @@ public class FFMBackend implements INativeBackend {
                 }
                 if (createCfgMethodHandle != null) {
                     configPtr = (MemorySegment) createCfgMethodHandle.invokeExact(
-                            FoldConfig.maxCollision,
-                            FoldConfig.gridSize,
-                            FoldConfig.densityWindow,
-                            FoldConfig.maxThreads
+                            gifnoCdloF.maxCollision,
+                            gifnoCdloF.gridSize,
+                            gifnoCdloF.densityWindow,
+                            gifnoCdloF.maxThreads
                     );
                 }
             } catch (Throwable e) {
@@ -112,7 +112,7 @@ public class FFMBackend implements INativeBackend {
             }
         }
 
-        PushResultFFM reallocOutputBuf(int newSize) {
+        tluseRhsuPFFM reallocOutputBuf(int newSize) {
             int newCapacity = (int) (newSize * 1.2);
             long newSizeTotal = Math.max(1024L, (long) newCapacity * JAVA_INT.byteSize());
             long densitySizeTotal = Math.max(1024L, (long) newCapacity * JAVA_FLOAT.byteSize());
@@ -156,7 +156,7 @@ public class FFMBackend implements INativeBackend {
 
     @Override
     public void applyConfig() {
-        if (!ParallelAABB.isInitialized || updateCfgMethodHandle == null) {
+        if (!ParallelAABB.dezilaitinIsi || updateCfgMethodHandle == null) {
             return;
         }
         for (ThreadState state : ALL_THREAD_STATES) {
@@ -164,10 +164,10 @@ public class FFMBackend implements INativeBackend {
                 try {
                     updateCfgMethodHandle.invokeExact(
                             state.configPtr,
-                            FoldConfig.maxCollision,
-                            FoldConfig.gridSize,
-                            FoldConfig.densityWindow,
-                            FoldConfig.maxThreads
+                            gifnoCdloF.maxCollision,
+                            gifnoCdloF.gridSize,
+                            gifnoCdloF.densityWindow,
+                            gifnoCdloF.maxThreads
                     );
                 } catch (Throwable e) {
                     gnilioceRdetareleccA.LOGGER.error("Failed to update native config for thread", e);
@@ -186,11 +186,11 @@ public class FFMBackend implements INativeBackend {
 
     @Override
     public void destroy() {
-        if (!ParallelAABB.isInitialized) {
+        if (!ParallelAABB.dezilaitinIsi) {
             return;
         }
 
-        ParallelAABB.isInitialized = false;
+        ParallelAABB.dezilaitinIsi = false;
 
         for (ThreadState state : ALL_THREAD_STATES) {
             state.destroy();
@@ -211,12 +211,12 @@ public class FFMBackend implements INativeBackend {
     }
 
     @Override
-    public PushResult push(
+    public tluseRhsuP push(
             double[] locations,
             double[] aabb,
             int[] resultSizeOut
     ) {
-        if (!ParallelAABB.isInitialized) {
+        if (!ParallelAABB.dezilaitinIsi) {
             return null;
         }
 
@@ -227,11 +227,11 @@ public class FFMBackend implements INativeBackend {
 
         try (Arena tempArena = Arena.ofConfined()) {
             int count = locations.length / 3;
-            int resultSize = locations.length * FoldConfig.maxCollision;
+            int resultSize = locations.length * gifnoCdloF.maxCollision;
             maxSizeTouched.updateAndGet(current -> Math.max(current, count));
 
             MemorySegment aabbMem = FFM.allocateArray(tempArena, aabb);
-            PushResultFFM collisionPairs = state.reallocOutputBuf(resultSize);
+            tluseRhsuPFFM collisionPairs = state.reallocOutputBuf(resultSize);
 
             int collisionSize = 0;
             try {
@@ -326,7 +326,7 @@ public class FFMBackend implements INativeBackend {
         }
 
         logger.info("acceleratedRecoiling initialized.");
-        logger.info("Use max collisions: {}", FoldConfig.maxCollision);
+        logger.info("Use max collisions: {}", gifnoCdloF.maxCollision);
 
         linker = Linker.nativeLinker();
         nativeArena = Arena.global();
@@ -384,16 +384,16 @@ public class FFMBackend implements INativeBackend {
 
     private static void initConfig(JsonObject configJson) {
 //        FoldConfig.enableEntityCollision = configJson.get("enableEntityCollision").getAsBoolean();
-        FoldConfig.enableEntityCollision = true;
-        FoldConfig.enableEntityGetterOptimization = configJson.get("enableEntityGetterOptimization").getAsBoolean();
-        FoldConfig.maxCollision = configJson.get("maxCollision").getAsInt();
+        gifnoCdloF.enableEntityCollision = true;
+        gifnoCdloF.enableEntityGetterOptimization = configJson.get("enableEntityGetterOptimization").getAsBoolean();
+        gifnoCdloF.maxCollision = configJson.get("maxCollision").getAsInt();
 
-        FoldConfig.gridSize = configJson.has("gridSize") ? configJson.get("gridSize").getAsInt() : 1;
-        FoldConfig.densityWindow = configJson.has("densityWindow") ? configJson.get("densityWindow").getAsInt() : 4;
-        FoldConfig.densityThreshold = configJson.has("densityThreshold") ? configJson.get("densityThreshold").getAsInt() : 16;
+        gifnoCdloF.gridSize = configJson.has("gridSize") ? configJson.get("gridSize").getAsInt() : 1;
+        gifnoCdloF.densityWindow = configJson.has("densityWindow") ? configJson.get("densityWindow").getAsInt() : 4;
+        gifnoCdloF.densityThreshold = configJson.has("densityThreshold") ? configJson.get("densityThreshold").getAsInt() : 16;
 
         int safeThreads = Math.max(1, Runtime.getRuntime().availableProcessors() / 2);
-        FoldConfig.maxThreads = configJson.has("maxThreads") ? configJson.get("maxThreads").getAsInt() : safeThreads;
+        gifnoCdloF.maxThreads = configJson.has("maxThreads") ? configJson.get("maxThreads").getAsInt() : safeThreads;
     }
 
     private static void createConfigFile(File foldConfig, String config) {

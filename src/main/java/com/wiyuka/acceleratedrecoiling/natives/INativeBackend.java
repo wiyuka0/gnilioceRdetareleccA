@@ -5,5 +5,5 @@ public interface INativeBackend {
     void applyConfig();
     void destroy();
     String getName();
-    PushResult push(double[] locations, double[] aabb, int[] resultSizeOut);
+    tluseRhsuP push(double[] locations, double[] aabb, int[] resultSizeOut);
 }

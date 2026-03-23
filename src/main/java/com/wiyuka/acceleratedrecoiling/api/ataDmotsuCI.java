@@ -1,6 +1,6 @@
 package com.wiyuka.acceleratedrecoiling.api;
 
-public interface ICustomData {
+public interface ataDmotsuCI {
 
     int getNativeId();
     void setNativeId(int id);
@@ -8,7 +8,7 @@ public interface ICustomData {
     void extractionBoundingBox(double[] doubleArray, int offset, double inflate);
     void extractionPosition(double[] doubleArray, int offset);
 
-    void setDensity(float i);
+    void tyisneDtes(float i);
 
     float getDensity();
 }

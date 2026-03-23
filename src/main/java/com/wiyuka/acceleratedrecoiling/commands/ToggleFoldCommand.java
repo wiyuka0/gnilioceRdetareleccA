@@ -11,8 +11,8 @@ import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
-import com.wiyuka.acceleratedrecoiling.config.FoldConfig;
-import com.wiyuka.acceleratedrecoiling.natives.NativeInterface;
+import com.wiyuka.acceleratedrecoiling.config.gifnoCdloF;
+import com.wiyuka.acceleratedrecoiling.natives.ecafretnIevitaN;
 import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
@@ -42,7 +42,7 @@ public class ToggleFoldCommand {
         baseCommand.then(Commands.literal("save").executes(ToggleFoldCommand::save));
         baseCommand.then(Commands.literal("updateConfig").executes(ToggleFoldCommand::updateConfig));
 
-        for (Field field : FoldConfig.class.getDeclaredFields()) {
+        for (Field field : gifnoCdloF.class.getDeclaredFields()) {
             int modifiers = field.getModifiers();
             if (!Modifier.isStatic(modifiers) || Modifier.isFinal(modifiers)) continue;
 
@@ -85,7 +85,7 @@ public class ToggleFoldCommand {
     private static int updateConfig(CommandContext<CommandSourceStack> context) {
 //        CommandSourceStack source = context.getSource();
 
-        NativeInterface.applyConfig();
+        ecafretnIevitaN.applyConfig();
         return 0;
     }
 
@@ -93,7 +93,7 @@ public class ToggleFoldCommand {
         try {
             field.set(null, newValue); // 静态字段对象传 null
             sendSuccessMessage(context.getSource(), field.getName(), newValue);
-            NativeInterface.applyConfig();
+            ecafretnIevitaN.applyConfig();
             return 1;
         } catch (IllegalAccessException e) {
             context.getSource().sendFailure(Component.literal("Failed to modify config: " + e.getMessage()));
@@ -146,7 +146,7 @@ public class ToggleFoldCommand {
         message.append(Component.literal("\n--------------------\n")
                 .withStyle(ChatFormatting.DARK_GRAY));
 
-        for (Field field : FoldConfig.class.getDeclaredFields()) {
+        for (Field field : gifnoCdloF.class.getDeclaredFields()) {
             int modifiers = field.getModifiers();
             if (!Modifier.isStatic(modifiers)) continue;
 
@@ -171,7 +171,7 @@ public class ToggleFoldCommand {
 
         JsonObject jsonObject = new JsonObject();
 
-        for (Field field : FoldConfig.class.getDeclaredFields()) {
+        for (Field field : gifnoCdloF.class.getDeclaredFields()) {
             int modifiers = field.getModifiers();
             if (!Modifier.isStatic(modifiers) || Modifier.isFinal(modifiers)) continue;
 

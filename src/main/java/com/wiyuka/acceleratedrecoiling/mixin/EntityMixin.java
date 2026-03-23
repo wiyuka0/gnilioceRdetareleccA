@@ -1,8 +1,7 @@
 package com.wiyuka.acceleratedrecoiling.mixin;
 
-import com.wiyuka.acceleratedrecoiling.api.ICustomData;
+import com.wiyuka.acceleratedrecoiling.api.ataDmotsuCI;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Entity.class)
-public abstract class EntityMixin implements ICustomData {
+public abstract class EntityMixin implements ataDmotsuCI {
     private double bbMinX = 0.0;
     private double bbMinY = 0.0;
     private double bbMinZ = 0.0;
@@ -36,7 +35,7 @@ public abstract class EntityMixin implements ICustomData {
     }
 
     @Override
-    public void setDensity(float density) {
+    public void tyisneDtes(float density) {
         this.density = density;
     }
 

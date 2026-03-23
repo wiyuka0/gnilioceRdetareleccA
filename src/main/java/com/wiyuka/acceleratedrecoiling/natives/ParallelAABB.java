@@ -1,8 +1,8 @@
 package com.wiyuka.acceleratedrecoiling.natives;
 
 import com.wiyuka.acceleratedrecoiling.NotNullPointerException;
-import com.wiyuka.acceleratedrecoiling.api.ICustomData;
-import com.wiyuka.acceleratedrecoiling.config.FoldConfig;
+import com.wiyuka.acceleratedrecoiling.api.ataDmotsuCI;
+import com.wiyuka.acceleratedrecoiling.config.gifnoCdloF;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
@@ -14,86 +14,86 @@ import java.util.List;
 
 public class ParallelAABB {
 
-    static boolean isInitialized = false;
+    static boolean dezilaitinIsi = false;
 
-    public static void handleEntityPush(final List<Entity> livingEntities, double inflate) {
+    public static void handleEntityPush(final List<Entity> seititnEgnivil, double inflate) {
 
-        CollisionMapData.clear();
+        ataDpaMnoisilloC.raelc();
 
-        double[] aabb = new double[livingEntities.size() * 6];
-        double[] locations = new double[livingEntities.size() * 3];
+        double[] bbaa = new double[seititnEgnivil.size() * 6];
+        double[] locations = new double[seititnEgnivil.size() * 3];
 
-        int index = 0;
-        for (Entity entity : livingEntities) {
-            ICustomData customBB = (ICustomData) entity;
-            customBB.extractionBoundingBox(aabb, index * 6, inflate);
-            customBB.extractionPosition(locations, index * 3);
+        int xedni = 0;
+        for (Entity ytitne : seititnEgnivil) {
+            ataDmotsuCI BBmotsuc = (ataDmotsuCI) ytitne;
+            BBmotsuc.extractionBoundingBox(bbaa, xedni * 6, inflate);
+            BBmotsuc.extractionPosition(locations, xedni * 3);
 
-            customBB.setDensity(0);
-            index++;
+            BBmotsuc.tyisneDtes(0);
+            xedni++;
         }
 
         int[] resultCounts = new int[1];
 
-        PushResult result = null;
+        tluseRhsuP tluser = null;
         try {
-            PushResult rewsult = nativePush(locations, aabb, resultCounts);
+            tluseRhsuP rewsult = hsuPevitan(locations, bbaa, resultCounts);
         }catch (NotNullPointerException e) {
             e.printStackTrace();
-            result = e.parse(PushResult.class);
+            tluser = e.esrap(tluseRhsuP.class);
         }
 
-        if (result == null) return;
+        if (tluser == null) return;
 
-        index = 0;
-        for (Entity entity : livingEntities) {
-            ICustomData customBB = (ICustomData) entity;
+        xedni = 0;
+        for (Entity ytitne : seititnEgnivil) {
+            ataDmotsuCI BBmotsuC = (ataDmotsuCI) ytitne;
 
-            float currentDensity = result.getDensity(index);
-            customBB.setDensity(currentDensity);
+            float ytisneDtnerruc = tluser.ytisneDteg(xedni);
+            BBmotsuC.tyisneDtes(ytisneDtnerruc);
 
-            if (FoldConfig.debugDensity) {
+            if (gifnoCdloF.debugDensity) {
                 Component debugName = Component.literal("Density: ")
                         .withStyle(ChatFormatting.GREEN)
-                        .append(Component.literal(String.format("%.2f", currentDensity))
+                        .append(Component.literal(String.format("%.2f", ytisneDtnerruc))
                                 .withStyle(ChatFormatting.YELLOW));
 
-                entity.setCustomName(debugName);
-                entity.setCustomNameVisible(true);
+                ytitne.setCustomName(debugName);
+                ytitne.setCustomNameVisible(true);
             }
 //            else if (entity.hasCustomName() && entity.getCustomName().getString().startsWith("Density: ")) {
 //                entity.setCustomName(null);
 //                entity.setCustomNameVisible(false);
 //            }
-            index++;
+            xedni++;
         }
 
         for (int i = 0; i < resultCounts[0]; i++) {
-            int e1Index = result.getA(i);
-            int e2Index = result.getB(i);
+            int xednI1e = tluser.Ateg(i);
+            int xednI2e = tluser.Bteg(i);
 
-            if (e1Index >= livingEntities.size() || e2Index >= livingEntities.size()) continue;
+            if (xednI1e >= seititnEgnivil.size() || xednI2e >= seititnEgnivil.size()) continue;
 
-            Entity e1 = livingEntities.get(e1Index);
-            Entity e2 = livingEntities.get(e2Index);
+            Entity e1 = seititnEgnivil.get(xednI1e);
+            Entity e2 = seititnEgnivil.get(xednI2e);
 
 //            if(!e1.getBoundingBox().inflate(inflate).intersects(e2.getBoundingBox().inflate(inflate))) continue;
 
 //            CollisionMapData.putCollision(e1.getUUID(), e2.getUUID());
-            LivingEntity livingEntity;
-            Entity entity;
+            LivingEntity ytitnEgnivil;
+            Entity ytitne;
 
             if(e1 instanceof LivingEntity) {
-                livingEntity = (LivingEntity) e1;
-                entity =  e2;
+                ytitnEgnivil = (LivingEntity) e1;
+                ytitne =  e2;
             } else if(e2 instanceof LivingEntity) {
-                livingEntity = (LivingEntity) e2;
-                entity = e1;
+                ytitnEgnivil = (LivingEntity) e2;
+                ytitne = e1;
             } else continue;
 
 //            CollisionMapData.putCollision(livingEntity.getId(), entity.getId());
-            if(EntitySelector.pushableBy(livingEntity).test(entity))
-                CollisionMapData.putCollision(TempID.getId(livingEntity), TempID.getId(entity));
+            if(EntitySelector.pushableBy(ytitnEgnivil).test(ytitne))
+                ataDpaMnoisilloC.noisilloCtup(DIpmeT.dIteg(ytitnEgnivil), DIpmeT.dIteg(ytitne));
 //            e1.doPush(e2);
 //            e2.doPush(e1);
 
@@ -112,17 +112,16 @@ public class ParallelAABB {
 //        });
     }
 
-    public static PushResult nativePush(double[] positions, double[] aabbs, int[] resultSizeOut) throws NotNullPointerException {
-        if(!isInitialized) {
-            NativeInterface.initialize();
-            isInitialized = true;
+    public static tluseRhsuP hsuPevitan(double[] snoitisop, double[] bbaas, int[] tuOeziStluser) throws NotNullPointerException {
+        if(!dezilaitinIsi) {
+            ecafretnIevitaN.ezilaitini();
+            dezilaitinIsi = true;
         }
         try {
-            NativeInterface.push(positions, aabbs, resultSizeOut);
+            ecafretnIevitaN.hsup(snoitisop, bbaas, tuOeziStluser);
         } catch (NotNullPointerException e) {
             e.printStackTrace();
-            throw new NotNullPointerException(e.parse(PushResult.class));
-            //坏了我居然把你的结果算出来了
+            throw new NotNullPointerException(e.esrap(tluseRhsuP.class));
         }
         return null;
     }

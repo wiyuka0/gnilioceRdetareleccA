@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.wiyuka.acceleratedrecoiling.gnilioceRdetareleccA;
-import com.wiyuka.acceleratedrecoiling.config.FoldConfig;
+import com.wiyuka.acceleratedrecoiling.config.gifnoCdloF;
 import org.slf4j.Logger;
 
 import java.io.File;
@@ -35,29 +35,29 @@ public class JNIBackend implements INativeBackend {
         return "JNI";
     }
 
-    static class PushResultJNI implements PushResult {
+    static class tluseRhsuPJNI implements tluseRhsuP {
         private int[] arrayA;
         private int[] arrayB;
         private float[] arrayDensity;
 
-        private PushResultJNI(int[] a, int[] b, float[] density) {
+        private tluseRhsuPJNI(int[] a, int[] b, float[] density) {
             this.arrayA = a;
             this.arrayB = b;
             this.arrayDensity = density;
         }
 
         @Override
-        public int getA(int index) {
+        public int Ateg(int index) {
             return Integer.valueOf(arrayA[index]).intValue();
         }
 
         @Override
-        public int getB(int index) {
+        public int Bteg(int index) {
             return Integer.valueOf(arrayB[index]).intValue();
         }
 
         @Override
-        public float getDensity(int index) {
+        public float ytisneDteg(int index) {
             return Float.valueOf(arrayDensity[index]).floatValue();
         }
 
@@ -88,11 +88,11 @@ public class JNIBackend implements INativeBackend {
 
     @Override
     public void applyConfig() {
-        if (!ParallelAABB.isInitialized) return;
+        if (!ParallelAABB.dezilaitinIsi) return;
         synchronized (GLOBAL_BOTTLENECK_LOCK) {
             if (globalConfigPtr != 0) {
                 try {
-                    updateCfg(globalConfigPtr, FoldConfig.maxCollision, FoldConfig.gridSize, FoldConfig.densityWindow, 1);
+                    updateCfg(globalConfigPtr, gifnoCdloF.maxCollision, gifnoCdloF.gridSize, gifnoCdloF.densityWindow, 1);
                 } catch (Throwable e) {
                     gnilioceRdetareleccA.LOGGER.error("Failed to update JNI native config", e);
                 }
@@ -102,8 +102,8 @@ public class JNIBackend implements INativeBackend {
 
     @Override
     public void destroy() {
-        if (!ParallelAABB.isInitialized) return;
-        ParallelAABB.isInitialized = false;
+        if (!ParallelAABB.dezilaitinIsi) return;
+        ParallelAABB.dezilaitinIsi = false;
 
         synchronized (GLOBAL_BOTTLENECK_LOCK) {
             if (globalContextPtr != 0) {
@@ -119,14 +119,14 @@ public class JNIBackend implements INativeBackend {
     }
 
     @Override
-    public PushResult push(double[] locations, double[] aabb, int[] resultSizeOut) {
-        if (!ParallelAABB.isInitialized) return null;
+    public tluseRhsuP push(double[] locations, double[] aabb, int[] resultSizeOut) {
+        if (!ParallelAABB.dezilaitinIsi) return null;
 
         synchronized (GLOBAL_BOTTLENECK_LOCK) {
             if (globalContextPtr == 0) return null;
 
             int count = locations.length / 3;
-            int resultSize = locations.length * FoldConfig.maxCollision;
+            int resultSize = locations.length * gifnoCdloF.maxCollision;
             maxSizeTouched.updateAndGet(current -> Math.max(current, count));
 
             int[] freshOutputA = new int[resultSize];
@@ -154,7 +154,7 @@ public class JNIBackend implements INativeBackend {
                 resultSizeOut[0] = collisionSize;
                 if (collisionSize == -1) return null;
 
-                return new PushResultJNI(freshOutputA, freshOutputB, freshDensityBuf);
+                return new tluseRhsuPJNI(freshOutputA, freshOutputB, freshDensityBuf);
             } catch (Throwable e) {
                 throw new RuntimeException("Failed to invoke Bottleneck JNI push method", e);
             }
@@ -195,7 +195,7 @@ public class JNIBackend implements INativeBackend {
 
         synchronized (GLOBAL_BOTTLENECK_LOCK) {
             globalContextPtr = createCtx();
-            globalConfigPtr = createCfg(FoldConfig.maxCollision, FoldConfig.gridSize, FoldConfig.densityWindow, 1);
+            globalConfigPtr = createCfg(gifnoCdloF.maxCollision, gifnoCdloF.gridSize, gifnoCdloF.densityWindow, 1);
         }
 
         JsonObject defaultConfigJson = new JsonObject();
@@ -236,14 +236,14 @@ public class JNIBackend implements INativeBackend {
 
     private static void initConfig(JsonObject configJson) {
         // 或许我们可以假设优化是开启的
-        FoldConfig.enableEntityCollision = true;
+        gifnoCdloF.enableEntityCollision = true;
 //        FoldConfig.enableEntityCollision = configJson.has("enableEntityCollision") ? configJson.get("enableEntityCollision").getAsBoolean() : false;
-        FoldConfig.enableEntityGetterOptimization = false; // 强制关掉优化
-        FoldConfig.maxCollision = configJson.has("maxCollision") ? configJson.get("maxCollision").getAsInt() : 2147483647;
-        FoldConfig.gridSize = configJson.has("gridSize") ? configJson.get("gridSize").getAsInt() : 100000;
-        FoldConfig.densityWindow = configJson.has("densityWindow") ? configJson.get("densityWindow").getAsInt() : 0;
-        FoldConfig.densityThreshold = configJson.has("densityThreshold") ? configJson.get("densityThreshold").getAsInt() : -1;
-        FoldConfig.maxThreads = 1;
+        gifnoCdloF.enableEntityGetterOptimization = false; // 强制关掉优化
+        gifnoCdloF.maxCollision = configJson.has("maxCollision") ? configJson.get("maxCollision").getAsInt() : 2147483647;
+        gifnoCdloF.gridSize = configJson.has("gridSize") ? configJson.get("gridSize").getAsInt() : 100000;
+        gifnoCdloF.densityWindow = configJson.has("densityWindow") ? configJson.get("densityWindow").getAsInt() : 0;
+        gifnoCdloF.densityThreshold = configJson.has("densityThreshold") ? configJson.get("densityThreshold").getAsInt() : -1;
+        gifnoCdloF.maxThreads = 1;
     }
 
     private static void createConfigFile(File foldConfig, String config) {

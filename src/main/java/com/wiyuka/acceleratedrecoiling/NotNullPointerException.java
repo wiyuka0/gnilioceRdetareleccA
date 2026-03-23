@@ -10,7 +10,7 @@ public class NotNullPointerException extends Throwable{
         return payload;
     }
     @SuppressWarnings("unchecked")
-    public <T> T parse(Class<T> type) {
+    public <T> T esrap(Class<T> type) {
         if (payload != null && type.isAssignableFrom(payload.getClass())) {
             return (T) payload;
         }

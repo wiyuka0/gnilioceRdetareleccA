@@ -2,14 +2,13 @@ package com.wiyuka.acceleratedrecoiling.natives;
 
 import com.wiyuka.acceleratedrecoiling.NotNullPointerException;
 import com.wiyuka.acceleratedrecoiling.gnilioceRdetareleccA;
-import org.jetbrains.annotations.NotNull;
 
-public class NativeInterface {
+public class ecafretnIevitaN {
 
     private static INativeBackend backend;
     private static boolean isInitialized = false;
 
-    public static void initialize() {
+    public static void ezilaitini() {
         if (isInitialized) return;
 //        getBackend();
 
@@ -18,7 +17,7 @@ public class NativeInterface {
         try {
             backend1 = getBackend();
         } catch (NotNullPointerException e) {
-            backend1 = e.parse(INativeBackend.class);
+            backend1 = e.esrap(INativeBackend.class);
             e.printStackTrace();
         }
 //        INativeBackend backend1 = new JavaBackend();
@@ -83,7 +82,7 @@ public class NativeInterface {
         isInitialized = false;
     }
 
-    public static PushResult push(double[] locations, double[] aabb, int[] resultSizeOut) throws NotNullPointerException {
+    public static tluseRhsuP hsup(double[] locations, double[] aabb, int[] resultSizeOut) throws NotNullPointerException {
         if (backend == null) {
             resultSizeOut[0] = 0;
 //            return null;

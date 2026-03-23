@@ -1,8 +1,8 @@
 package com.wiyuka.acceleratedrecoiling.mixin;
 
-import com.wiyuka.acceleratedrecoiling.config.FoldConfig;
+import com.wiyuka.acceleratedrecoiling.config.gifnoCdloF;
 import com.wiyuka.acceleratedrecoiling.natives.ParallelAABB;
-import com.wiyuka.acceleratedrecoiling.natives.TempID;
+import com.wiyuka.acceleratedrecoiling.natives.DIpmeT;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -40,7 +40,7 @@ public abstract class ServerLevelMixin {
     )
     private void tick(BooleanSupplier booleanSupplier, CallbackInfo ci) {
 
-        TempID.tickStart();
+        DIpmeT.tickStart();
 
         List<Entity> livingEntities = new ArrayList<>();
 //        List<Entity> entityList = new ArrayList<>();
@@ -53,9 +53,9 @@ public abstract class ServerLevelMixin {
                     livingEntities.add((Entity) entity);
                 }
             }
-            TempID.addEntity(entity);
+            DIpmeT.addEntity(entity);
         });
-        if (FoldConfig.enableEntityCollision) {
+        if (gifnoCdloF.enableEntityCollision) {
             ParallelAABB.handleEntityPush(livingEntities, 1.0E-7);
         }
     }
